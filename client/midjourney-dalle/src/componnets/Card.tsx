@@ -1,6 +1,10 @@
 import React from 'react'
 
-const Card = () => {
+type CardProps = {
+  post : {}
+}
+
+const Card = ({post}: CardProps) => {
   return (
     <div>Card</div>
   )

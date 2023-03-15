@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react'
+import ClipLoader from "react-spinners/ClipLoader";
 
 //Components
-import ClipLoader from "react-spinners/ClipLoader";
-import { Loader, Card, FormField } from '../componnets'
+import { RenderCards, Card, FormField } from '../componnets'
+
 
 const Home = () => {
     const [loading, setLoading] = useState(false);
@@ -47,8 +48,22 @@ const Home = () => {
                         </>
                     )
                 }
+                <div className='grid xs:grid-cols-2 sm-grid-cols-3 lg:grid-cols-4 grid-cols-1 gap-3'>
+                    {
+                        searchText ? (
+                            <RenderCards
+                               data={[]}
+                               title='No search results found'
+                              />
+                        ): (
+                            <RenderCalls
+                              data={[]}
+                              title='No Posts found'
+                             />
+                        )
+                    }
+                </div>
             </div>
-
         </section>
     )
 }
