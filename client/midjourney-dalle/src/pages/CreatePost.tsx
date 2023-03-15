@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router'
+import axios from 'axios'
 import ClipLoader from "react-spinners/ClipLoader";
 
 // Components
@@ -9,15 +10,24 @@ import { getRandomPrompt } from '../utils'
 // Assets
 import preview from '../assets/assets/preview.png'
 
+interface FormState {
+  name: string,
+  prompt: string,
+  photo: string
+}
+
+
 const CreatePost = () => {
   const navigate = useNavigate()
-
-  const [form, setForm] = useState({
+  
+  
+  const [form, setForm] = useState<FormState>({
     name: '',
     prompt: '',
     photo: ''
   })
-
+  console.log(form.prompt)
+  
   const [generatingImg, setGeneratingImg] = useState(false)
   const [loading, setLoading] = useState(false)
 
@@ -25,16 +35,49 @@ const CreatePost = () => {
     e.preventDefault()
   }
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-
+  const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setForm({
+      ...form,
+      name: value
+    });
+  }
+  
+  const handlePromptChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { value } = e.target;
+    setForm({
+      ...form,
+      prompt: value
+    });
   }
 
   const handleSurpriseMe = () => {
 
   }
-  
-  const generateImage = () => {
-
+  const generateImage = async () => {
+    if (form.prompt) {
+      try {
+        setGeneratingImg(true)
+        const { data } = await axios.post('http://localhost:5000/api/dalle', {
+          prompt: form.prompt
+        }, {
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        })
+        body: JSON.stringify({ prompt: form.prompt })
+        setForm({
+          ...form,
+           photo: `data:image/jpeg;base64,${data}`
+          })
+      } catch (error) {
+        alert(error)
+      } finally {
+        setGeneratingImg(false)
+      }
+    } else {
+      alert('Please, enter a prompt')
+    }
   }
 
   return (
@@ -56,15 +99,17 @@ const CreatePost = () => {
             name="name"
             placeholder="Jonh Doe"
             value={form.name}
-            handleChange={handleChange}
+            handleChange={handleNameChange}
+            isSurprisedMe
+            handleSurpriseMe={handleSurpriseMe}
           />
           <FormField
-            labelName="Your name"
+            labelName="Prompt"
             type="text"
-            name="name"
+            name="prompt"
             placeholder="a pencil and watercolor drawing of a bright city in the future with flying cars"
             value={form.prompt}
-            handleChange={handleChange}
+            handleChange={handlePromptChange}
             isSurprisedMe
             handleSurpriseMe={handleSurpriseMe}
           />
@@ -105,25 +150,25 @@ const CreatePost = () => {
             }
           </div>
 
-            <div className='mt-5 flex gap-5'>
-              <button 
+          <div className='mt-5 flex gap-5'>
+            <button
               type='button'
-               onClick={generateImage}
-               className="text-white bg-green-700 font-medium rounded-md text-sm w-full sm:w-auto px-5 py-2.5 text-center"
-               >
-                {generatingImg ? 'Generating...' : 'Generate'}
-               </button>
-            </div>
+              onClick={generateImage}
+              className="text-white bg-green-700 font-medium rounded-md text-sm w-full sm:w-auto px-5 py-2.5 text-center"
+            >
+              {generatingImg ? 'Generating...' : 'Generate'}
+            </button>
+          </div>
 
-            <div className='mt-10'>
-              <p className='mt-2 text-[#666e75] text-[14px]'>Once you have created the image you want, you can share it with others in the community.</p>
-            <button 
-            type='submit'
-            className='mt-3 text-white bg-[#6469ff] font-medium rounded-md text-sm w-full px-5 py-2.5 text-center'
+          <div className='mt-10'>
+            <p className='mt-2 text-[#666e75] text-[14px]'>Once you have created the image you want, you can share it with others in the community.</p>
+            <button
+              type='submit'
+              className='mt-3 text-white bg-[#6469ff] font-medium rounded-md text-sm w-full px-5 py-2.5 text-center'
             >
               {loading ? 'Sharing...' : 'Share with the community.'}
             </button>
-            </div>
+          </div>
 
         </div>
       </form>

@@ -7,7 +7,7 @@ dotenv.config()
 const router = Router()
 
 const configuration = new Configuration({
-    apiKey: process.env.OPEN_AI_KEY 
+    apiKey:process.env.OPEN_AI_KEY 
 
 });
 
@@ -26,7 +26,7 @@ router.post('/', async (req, res) => {
             size: '1024x1024', 
             response_format: 'b64_json'
         })
-
+        console.log(aiResponse.data.data)
         const image = aiResponse.data.data[0].b64_json
         res.status(200).json(image)
     } catch (error) {
