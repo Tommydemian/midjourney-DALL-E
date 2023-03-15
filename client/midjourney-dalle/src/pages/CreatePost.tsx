@@ -26,7 +26,6 @@ const CreatePost = () => {
     prompt: '',
     photo: ''
   })
-  console.log(form.prompt)
   
   const [generatingImg, setGeneratingImg] = useState(false)
   const [loading, setLoading] = useState(false)
@@ -35,24 +34,16 @@ const CreatePost = () => {
     e.preventDefault()
   }
 
-  const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setForm({
       ...form,
-      name: value
-    });
-  }
-  
-  const handlePromptChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { value } = e.target;
-    setForm({
-      ...form,
-      prompt: value
+      [e.target.name]: e.target.value
     });
   }
 
   const handleSurpriseMe = () => {
-
+    const randomPrompt = getRandomPrompt(form.prompt);
+    setForm({...form, prompt: randomPrompt})
   }
   const generateImage = async () => {
     if (form.prompt) {
@@ -99,7 +90,7 @@ const CreatePost = () => {
             name="name"
             placeholder="Jonh Doe"
             value={form.name}
-            handleChange={handleNameChange}
+            handleChange={handleChange}
             isSurprisedMe
             handleSurpriseMe={handleSurpriseMe}
           />
@@ -109,7 +100,7 @@ const CreatePost = () => {
             name="prompt"
             placeholder="a pencil and watercolor drawing of a bright city in the future with flying cars"
             value={form.prompt}
-            handleChange={handlePromptChange}
+            handleChange={handleChange}
             isSurprisedMe
             handleSurpriseMe={handleSurpriseMe}
           />
