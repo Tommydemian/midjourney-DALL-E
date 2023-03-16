@@ -36,18 +36,17 @@ const CreatePost = () => {
     if (form.prompt && form.photo) {
       setLoading(true);
       try {
-        const response = await axios.post('http://localhost:5000/api/posts', {
-          prompt: form.prompt
-        }, {
+        const response = await fetch('http://localhost:5000/api/posts', {
+          method: 'POST', 
           headers: {
             'Content-Type': 'application/json'
-          }
+          },
+          body: JSON.stringify(form)
         })
-        body: JSON.stringify(form)
-        const responseData = response.data;
+        await response.json();
         navigate('/')
       } catch (error) {
-        
+        console.log(error)
       } finally {
         setLoading(false)
       }
@@ -72,13 +71,12 @@ const CreatePost = () => {
       try {
         setGeneratingImg(true)
         const { data } = await axios.post('http://localhost:5000/api/dalle', {
-          prompt: form.prompt
+           prompt: form.prompt 
         }, {
           headers: {
             'Content-Type': 'application/json'
           }
         })
-        body: JSON.stringify({ prompt: form.prompt })
         setForm({
           ...form,
            photo: `data:image/jpeg;base64,${data}`

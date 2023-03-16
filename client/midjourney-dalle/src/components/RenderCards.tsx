@@ -1,22 +1,29 @@
-// import React from 'react'
-// import Card from './Card'
+import React from 'react'
+import Card from './Card'
 
-// type RenderCardsProps = {
-//     data?: [],
-//     title: string
-// }
+interface Post {
+    name: string
+    photo: string
+    prompt: string
+    __v: number
+     _id: string
+    }
 
-// const RenderCards = ({data, title}: RenderCardsProps) => {
+type RenderCardsProps = {
+    data: Post[]
+    title: string
+}
 
-//     if (data?.length? data?.length > 0 : null) {
-//         return data?.map((post:any) => (<Card key={post.id} post={post} />) )
-//     } else (
-//         <div>
-//             <h2 className='mt-5 font-bold text-[#6449ff] text-xl uppercase'>
-//               { title }  
-//             </h2>
-//         </div>
-//     )
-// }
+const RenderCards = ({data, title}: RenderCardsProps) => {
+    if (data?.length > 0 ) {
+        return data?.map((post:Post) => (<Card key={post._id} post={post} />) )
+    } else (
+        <div>
+            <h2 className='mt-5 font-bold text-[#6449ff] text-xl uppercase'>
+              { title }  
+            </h2>
+        </div>
+    )
+}
 
-// export default RenderCards
+export default RenderCards

@@ -1,15 +1,67 @@
+import axios from 'axios';
 import React, { useState, useEffect } from 'react'
 import ClipLoader from "react-spinners/ClipLoader";
 
 //Components
-import { Card, FormField } from '../components'
+import { RenderCards, Card, FormField } from '../components'
+
+interface Post {
+name: string
+photo: string
+prompt: string
+__v: number
+ _id: string
+}
 
 
 const Home = () => {
     const [loading, setLoading] = useState(false);
-    const [allPosts, setAllPosts] = useState(null);
+    const [allPosts, setAllPosts] = useState<Post[] | null>(null);
     const [searchText, setSearchText] = useState('');
+    const [searchedResults, setSearchedResults] = useState<Post[] | null>(null)
+    const [searchTimeout, setSearchTimeout] = useState<number | null>(null)
+    
+    
 
+    useEffect(() => {
+        const fetchPosts = async () => {
+            setLoading(true)
+            try {
+                const response = await axios.get('http://localhost:5000/api/posts', {
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                })
+                // response ok? 
+                if (response.status === 200){
+                    const data = response.data
+                    setAllPosts(data.data)
+                }
+                
+            } catch (error) {
+                alert(error)
+            } finally {
+                setLoading(false)
+            }
+        }
+        fetchPosts()
+    }, [])
+    
+    const handleSearchChange = (e: any ) => {
+        setSearchText(e.target.value)
+
+        // debounce time
+        setSearchTimeout(
+        setTimeout(() => {
+            if (allPosts){
+                const searchResults = allPosts.filter(
+                    (item) => item.name.toLowerCase().includes(searchText.toLowerCase())
+                    ||  
+                    item.prompt.toLowerCase().includes(searchText.toLowerCase()))
+                    setSearchedResults(searchResults)
+                }
+        }, 1000))
+    }
 
     return (
         <section className='max-w-7x1 mx-auto'>
@@ -23,7 +75,14 @@ const Home = () => {
             </div>
 
             <div className='mt-16'>
-                <FormField />
+                <FormField 
+                  labelName='search posts'
+                  type="text"
+                  name='text'
+                  placeholder='Search Posts...'
+                  value={searchText}
+                  handleChange={handleSearchChange}
+                />
             </div>
 
             <div className='mt-10'>
@@ -49,19 +108,19 @@ const Home = () => {
                     )
                 }
                 <div className='grid xs:grid-cols-2 sm-grid-cols-3 lg:grid-cols-4 grid-cols-1 gap-3'>
-                    {/* {
+                    {
                         searchText ? (
                             <RenderCards
-                               data={[]}
+                               data={searchedResults}
                                title='No search results found'
                               />
                         ): (
-                            <RenderCalls
-                              data={[]}
+                            <RenderCards
+                              data={allPosts}
                               title='No Posts found'
                              />
                         )
-                    } */}
+                    }
                 </div>
             </div>
         </section>
