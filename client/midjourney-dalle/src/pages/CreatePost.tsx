@@ -9,6 +9,7 @@ import { FormField } from '../components'
 import { getRandomPrompt } from '../utils'
 // Assets
 import preview from '../assets/assets/preview.png'
+import { Form } from 'react-router-dom';
 
 interface FormState {
   name: string,
@@ -30,8 +31,29 @@ const CreatePost = () => {
   const [generatingImg, setGeneratingImg] = useState(false)
   const [loading, setLoading] = useState(false)
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
+    if (form.prompt && form.photo) {
+      setLoading(true);
+      try {
+        const response = await axios.post('http://localhost:5000/api/posts', {
+          prompt: form.prompt
+        }, {
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        })
+        body: JSON.stringify(form)
+        const responseData = response.data;
+        navigate('/')
+      } catch (error) {
+        
+      } finally {
+        setLoading(false)
+      }
+    } else {
+      alert('please, enter a prompt in order to generate an image')
+    }
   }
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
