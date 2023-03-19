@@ -35,6 +35,7 @@ router.post('/', async (req, res) => {
             prompt,
             photo: photoUrl.url
         });
+        console.log(newPost)
         res.status(201).json({ success: true, data: newPost });
 
     } catch (error) {
