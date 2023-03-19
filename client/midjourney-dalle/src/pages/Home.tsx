@@ -36,9 +36,11 @@ const Home = () => {
                 if (response.status === 200){
                     const data = response.data
                     setAllPosts(data.data)
+
                 }
                 
             } catch (error) {
+                console.log(error)
                 alert(error)
             } finally {
                 setLoading(false)

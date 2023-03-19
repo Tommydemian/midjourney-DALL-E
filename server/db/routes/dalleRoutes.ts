@@ -7,15 +7,15 @@ dotenv.config()
 const router = Router()
 
 const configuration = new Configuration({
-    apiKey:process.env.OPEN_AI_KEY 
+    apiKey:process.env.OPENAI_API_KEY 
 
 });
 
 const openai = new OpenAIApi(configuration)
 
-router.get('/', (req, res) => {
-    res.send('hello from apikey')
-})
+// router.get('/', (req, res) => {
+//     res.send('hello from apikey')
+// })
 
 router.post('/', async (req, res) => {
     try {
