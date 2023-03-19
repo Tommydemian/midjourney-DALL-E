@@ -4,7 +4,8 @@
   "main": "server.ts",
   "license": "MIT",
   "scripts": {
-    "dev": "nodemon server.ts"
+    "dev": "nodemon server.js",
+    "build": "tsc"
   },
   "dependencies": {
     "cloudinary": "^1.35.0",
