@@ -5,12 +5,13 @@
   "license": "MIT",
   "type": "module",
   "engines": {
-    "node": "18.x"
+    "node": "16.x"
   },
   "scripts": {
     "dev": "node server.js"
   },
   "dependencies": {
+    "@vercel/node": "^2.9.13",
     "cloudinary": "^1.35.0",
     "cors": "^2.8.5",
     "dotenv": "^16.0.3",
