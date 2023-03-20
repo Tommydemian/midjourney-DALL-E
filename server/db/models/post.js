@@ -1,7 +1,6 @@
-"use strict";
-exports.__esModule = true;
-var mongoose_1 = require("mongoose");
-var Post = new mongoose_1["default"].Schema({
+import mongoose from "mongoose";
+
+const Post = new mongoose.Schema({
     name: {
         type: String,
         required: true
@@ -13,7 +12,9 @@ var Post = new mongoose_1["default"].Schema({
     photo: {
         type: String,
         required: true
-    }
+    },
 });
-var PostSchema = mongoose_1["default"].model('Post', Post);
-exports["default"] = PostSchema;
+
+const PostSchema = mongoose.model('Post', Post);
+
+export default PostSchema;

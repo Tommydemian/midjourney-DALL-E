@@ -1,9 +1,7 @@
-"use strict";
-exports.__esModule = true;
-exports.connectDb = void 0;
-var mongoose_1 = require("mongoose");
-function connectDb(url) {
-    mongoose_1["default"].connect(url)
-        .then(function () { return console.log('db connected'); })["catch"](function (err) { return console.log(err); });
+import mongoose from 'mongoose'
+
+export function connectDb(url) {
+    mongoose.connect(url)
+    .then(() => console.log('db connected'))
+    .catch((err) => console.log(err))
 }
-exports.connectDb = connectDb;
